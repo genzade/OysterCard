@@ -3,11 +3,11 @@ class OysterCard
   MINIMUM_FARE = 1
   LIMIT = 90
 
-  attr_reader :balance, :travelling
+  attr_reader :balance, :entry_station
 
   def initialize
     @balance = DEFAULT_BALANCE
-    @travelling = false
+    @entry_station = nil
   end
 
   def top_up(amount)
@@ -15,18 +15,18 @@ class OysterCard
     @balance += amount
   end
 
-  def touch_in
+  def touch_in(station)
     raise 'Not Enough Credit: Please Top Up' if balance < MINIMUM_FARE
-    @travelling = true
+    @entry_station = station
   end
 
-  def touch_out
+  def touch_out(station)
     deduct(MINIMUM_FARE)
-    @travelling = false
+    @entry_station = nil
   end
 
   def in_journey?
-    !!@travelling
+    !!@entry_station
   end
 
   private

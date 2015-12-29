@@ -4,6 +4,7 @@ describe OysterCard do
   subject(:oyster_card) { described_class.new }
 
   let(:card) { described_class.new }
+  let(:station) { double :station }
 
   describe 'initialization' do
     describe '#balance' do
@@ -34,28 +35,36 @@ describe OysterCard do
   context 'in journey' do
     before do
       oyster_card.top_up(1)
-      oyster_card.touch_in
+      oyster_card.touch_in(station)
     end
 
-    describe '#touch_in' do
+    describe '#touch_in(station)' do
       it 'should be in journey when touched in' do
         expect(oyster_card).to be_in_journey
       end
 
       it 'should raise an error if balance is not enough' do
-        expect { card.touch_in }.to raise_error 'Not Enough Credit: Please Top Up'
+        expect { card.touch_in(station) }.to raise_error 'Not Enough Credit: Please Top Up'
+      end
+
+      it 'records entry station upon touching in' do
+        expect(oyster_card.touch_in(station)).to eq station
       end
     end
 
-    describe '#touch_out' do
+    describe '#touch_out(station)' do
       it 'should not be in journey when touched out' do
-        oyster_card.touch_out
+        oyster_card.touch_out(station)
         expect(oyster_card).not_to be_in_journey
       end
 
       it 'should deduct a minimum fare upon touching out' do
         minimum_fare = OysterCard::MINIMUM_FARE
-        expect { oyster_card.touch_out }.to change { oyster_card.balance }.by(-minimum_fare)
+        expect { oyster_card.touch_out(station) }.to change { oyster_card.balance }.by(-minimum_fare)
+      end
+
+      it 'resets the entry station upon touching out' do
+        expect(oyster_card.touch_out(station)).to be_nil
       end
     end
   end
