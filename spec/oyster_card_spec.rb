@@ -7,7 +7,7 @@ describe OysterCard do
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
 
-  let(:journey) { {:entry_station=>entry_station, :exit_station=>exit_station} }
+  let(:journey) { {:entry=>entry_station, :exit=>exit_station} }
 
   default_balance = OysterCard::DEFAULT_BALANCE
   maximum_balance = OysterCard::LIMIT
@@ -66,7 +66,7 @@ describe OysterCard do
       end
 
       it 'records entry station upon touching in' do
-        expect(oyster_card.journey).to eq :entry_station=>entry_station
+        expect(oyster_card.journey).to eq :entry=>entry_station
       end
     end
 
@@ -78,16 +78,6 @@ describe OysterCard do
       it 'should not be in journey when touched out' do
         oyster_card.touch_out(exit_station)
         expect(oyster_card).not_to be_in_journey
-      end
-
-      it 'resets the entry station upon touching out' do
-        oyster_card.touch_out(exit_station)
-        expect(oyster_card.entry_station).to be_nil
-      end
-
-      it 'stores exit station' do
-        oyster_card.touch_out(exit_station)
-        expect(oyster_card.exit_station).to eq exit_station
       end
 
       it 'stores a journey' do
