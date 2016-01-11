@@ -4,10 +4,11 @@ describe OysterCard do
   subject(:oyster_card) { described_class.new }
 
   let(:card) { described_class.new }
+  let(:journey) { double :journey }
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
 
-  let(:journey) { {:entry=>entry_station, :exit=>exit_station} }
+  let(:journey_current) { {:entry=>entry_station, :exit=>exit_station} }
 
   default_balance = OysterCard::DEFAULT_BALANCE
   maximum_balance = OysterCard::LIMIT
@@ -20,26 +21,29 @@ describe OysterCard do
       end
     end
 
-    describe '#in_journey' do
-      it 'is initially not in a journey' do
-        expect(oyster_card).not_to be_in_journey
-      end
-    end
+    # describe '#in_journey' do
+    #   it 'is initially not in a journey' do
+    #     expect(oyster_card).not_to be_in_journey
+    #   end
+    # end
 
-    describe '#journey' do
-      it 'journey should be empty to begin with' do
-        expect(oyster_card.journey).to be_empty
-      end
-    end
+    # describe '#journey' do
+    #   it 'journey should be empty to begin with' do
+    #     expect(oyster_card.journey_current).to be_empty
+    #   end
+    # end
 
-    describe '#journeys' do
-      it 'journey history should be empty to begin with' do
-        expect(oyster_card.journeys).to be_empty
-      end
-    end
+    # describe '#journeys' do
+    #   it 'journey history should be empty to begin with' do
+    #     expect(oyster_card.journeys).to be_empty
+    #   end
+    # end
   end
 
   describe '#top_up' do
+    # before do
+    #   allow(journey).to receive(:report_broken).and_return(true)
+    # end
     it 'can top up balance' do
       expect { oyster_card.top_up(1) }.to change { oyster_card.balance }.by 1
     end
@@ -57,16 +61,8 @@ describe OysterCard do
     end
 
     describe '#touch_in(entry_station)' do
-      it 'should be in journey when touched in' do
-        expect(oyster_card).to be_in_journey
-      end
-
       it 'should raise an error if balance is not enough' do
         expect { card.touch_in(entry_station) }.to raise_error 'Not Enough Credit: Please Top Up'
-      end
-
-      it 'records entry station upon touching in' do
-        expect(oyster_card.journey).to eq :entry=>entry_station
       end
     end
 
@@ -78,11 +74,6 @@ describe OysterCard do
       it 'should not be in journey when touched out' do
         oyster_card.touch_out(exit_station)
         expect(oyster_card).not_to be_in_journey
-      end
-
-      it 'stores a journey' do
-        oyster_card.touch_out(exit_station)
-        expect(oyster_card.journeys).to include journey
       end
     end
   end
