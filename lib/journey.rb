@@ -25,12 +25,13 @@ class Journey
     @journey_current.length == 1
   end
 
-  def penalty_fare
+  def fare
     total = 0
     unless @journeys.empty?
-      total += PENALTY if journeys[-1][:entry] == nil || journeys[-1][:exit] == nil
+      total += PENALTY + MINIMUM_FARE if journeys[-1][:exit] == nil
+      total += PENALTY if journeys[-1][:entry] == nil
     end
-    total += MINIMUM_FARE 
+    total += MINIMUM_FARE if journey_current.empty?
     return total
   end
 

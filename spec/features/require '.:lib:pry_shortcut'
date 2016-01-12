@@ -1,0 +1,15 @@
+require './lib/bike'
+require './lib/docking_station'
+require './lib/van'
+station = DockingStation.new(3)
+bike = Bike.new
+bike2 = Bike.new
+broken_bike = Bike.new
+rejected_bike = Bike.new
+station
+bike
+bike2
+broken_bike.report_broken
+station.dock(bike)
+station.dock(bike2)
+station.dock(broken_bike)

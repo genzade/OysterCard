@@ -1,6 +1,6 @@
 class Station
   CENTRAL = {
-    Bank: 1, 
+    Bank:               1, 
     Liverpool_Street:   1,
     Bethnal_Green:      2,
     Mile_End:           2,

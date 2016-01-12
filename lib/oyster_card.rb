@@ -19,11 +19,12 @@ class OysterCard
   def touch_in(station)
     raise 'Not Enough Credit: Please Top Up' if balance < journey.min_fare
     journey.touch_in(station)
+    deduct(journey.fare)
   end
 
   def touch_out(station)
     @journey.touch_out(station)
-    deduct(journey.min_fare)###
+    deduct(journey.fare)###
   end
 
   def in_journey?
