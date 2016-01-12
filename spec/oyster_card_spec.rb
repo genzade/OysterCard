@@ -4,7 +4,7 @@ describe OysterCard do
   subject(:oyster_card) { described_class.new }
 
   let(:card) { described_class.new }
-  let(:journey) { double :journey }
+  let(:journey) { double :journey, :min_fare => 1 }
   let(:entry_station) { double :station }
   let(:exit_station) { double :station }
 
@@ -12,7 +12,7 @@ describe OysterCard do
 
   default_balance = OysterCard::DEFAULT_BALANCE
   maximum_balance = OysterCard::LIMIT
-  minimum_fare = OysterCard::MINIMUM_FARE
+  # minimum_fare = OysterCard::MINIMUM_FARE
 
   describe 'initialization' do
     describe '#balance' do
@@ -68,7 +68,7 @@ describe OysterCard do
 
     describe '#touch_out(station)' do
       it 'should deduct a minimum fare upon touching out' do
-        expect { oyster_card.touch_out(exit_station) }.to change { oyster_card.balance }.by(-minimum_fare)
+        expect { oyster_card.touch_out(exit_station) }.to change { oyster_card.balance }.by(-journey.min_fare)
       end
 
       it 'should not be in journey when touched out' do
